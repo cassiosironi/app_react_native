@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     form: {
         width: "100%",
         height: "auto",
-        marginTop: 30,
+        marginTop: 0,
         padding: 10,
     },
 
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         height: "50%",
     },
     listImcs: {
-        marginTop: 20,
+        marginTop: 120,
         marginBottom: 20,
     },
     resultImcItem: {
@@ -77,7 +77,20 @@ const styles = StyleSheet.create({
         fontSize: 26,
         color: "red",
         fontWeight: "bold",
-    }
+    },
+    clearButton: {
+        backgroundColor: 'red',
+        padding: 10,
+        borderRadius: 8,
+        position: 'absolute',
+        bottom: 16,
+        right: 16,
+        alignItems: 'center',
+    },
+    clearButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
 
 });
 

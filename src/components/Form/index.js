@@ -1,7 +1,8 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { View, Text, TextInput, Vibration, TouchableOpacity, Pressable, Keyboard, FlatList } from "react-native"
 import ResultImc from './ResultImc/'
 import styles from "./style"
+import { FontAwesome } from '@expo/vector-icons'
 
 
 
@@ -14,6 +15,47 @@ export default function Form() {
     const [textButton, setTextButton] = useState("Calcular")
     const [errorMessage, setErrorMessage] = useState(null)
     const [imcList, setImcList] = useState([])
+
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () => {
+                setKeyboardVisible(true);
+            }
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                setKeyboardVisible(false);
+            }
+        );
+
+        // Remove os listeners quando o componente for desmontado
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
+    }, []);
+
+
+    const clearList = () => {
+        setImcList([]);
+    };
+
+    const renderClearButton = () => {
+        if (imcList.length >= 1 && !isKeyboardVisible) {
+            return (
+                <View style={styles.clearButton}>
+                    <TouchableOpacity onPress={clearList} >
+                        <Text style={styles.clearButtonText}><FontAwesome name="trash" /> Limpar</Text>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
+        return null;
+    };
 
 
     function imcCalculator() {
@@ -52,11 +94,19 @@ export default function Form() {
         <View style={styles.formContext}>
             {imc == null ?
                 <Pressable onPress={Keyboard.dismiss} style={styles.form}>
-                    <Text style={styles.formLabel}>Altura</Text>
-                    <Text style={styles.errorMessage}>{errorMessage}</Text>
+                    {!isKeyboardVisible && (
+                        <>
+                            <Text style={styles.formLabel}>Altura</Text>
+                            <Text style={styles.errorMessage}>{errorMessage}</Text>
+                        </>
+                    )}
                     <TextInput style={styles.input} onChangeText={setHeight} value={height} placeholder="Ex: 1.75" keyboardType="numeric" />
-                    <Text style={styles.formLabel}>Peso</Text>
-                    <Text style={styles.errorMessage}>{errorMessage}</Text>
+                    {!isKeyboardVisible && (
+                        <>
+                            <Text style={styles.formLabel}>Peso</Text>
+                            <Text style={styles.errorMessage}>{errorMessage}</Text>
+                        </>
+                    )}
                     <TextInput style={styles.input} onChangeText={setWeight} value={weight} placeholder="Ex: 82.70" keyboardType="numeric" />
 
                     <TouchableOpacity style={styles.ButtonCalculator} onPress={() => validationImc()}  >
@@ -76,10 +126,13 @@ export default function Form() {
                 </View>
             }
 
+
+            {renderClearButton()}
+
             <FlatList
                 style={styles.listImcs} data={imcList}
                 keyExtractor={(item) => { item.id }}
-                showsVerticalScrollIndicator={false}
+                showsVerticalScrollIndicator={true}
                 renderItem={({ item }) => {
                     return (
                         <Text style={styles.resultImcItem}>
@@ -93,6 +146,7 @@ export default function Form() {
                 }}
             >
             </FlatList>
+
         </View>
 
 
