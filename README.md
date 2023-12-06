@@ -9,4 +9,3 @@ Criação de App teste ONEBITHEALTH para calculo de IMC utilizando EXPO, compat�
 <span></span><br>
 <span><strong>Demo:</strong></span><br>
 
-<img src="https://cassiosironi.com/wp-content/themes/cassiosironi-theme/repo/app1.gif" width="200">
